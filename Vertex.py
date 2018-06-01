@@ -3,6 +3,30 @@
 from collections.abc import Collection
 from weakref import ref
 
+
+def _clean(list_of_incidents, wr):
+    # функция принадлежит модулю
+    # wr - принимает параметр слабой ссылки на удаляемый объект
+    """
+    #старая реализация
+    for indx in range(0, len(self.__incidents)):
+        # проходимся по совокупности инцидентных вершин
+        ref, _ = self.__incidents[indx]
+        # распаковываем кортеж ссылка, вес(не исп-ся)
+        if ref is wr:
+            # если ссылка совпадает с заданной
+            del self.__incidents[indx]
+            # удаляем по заданному индексу
+            break
+    """
+    for indx, (wref, _) in enumerate(list_of_incidents):
+        if wref is wr:
+            break
+    else:
+        return
+    del list_of_incidents[indx]
+
+
 class Vertex(Collection):
     # класс вершины
     def __init__(self, name):
@@ -12,37 +36,35 @@ class Vertex(Collection):
         # Совокупность инцидентных вершин
         self.__incidents = []
 
+    def __del__(self):
+        print('Vertex {} deleted'.format(self.name))
+
     @property
     def name(self):
         return self.__name
 
-    def __clean(self, wr):
-        # функция закрытая
-        # wr - принимает параметр слабой ссылки на удаляемый объект
-        """
-        #старая реализация
-        for indx in range(0, len(self.__incidents)):
-            # проходимся по совокупности инцидентных вершин
-            ref, _ = self.__incidents[indx]
-            # распаковываем кортеж ссылка, вес(не исп-ся)
-            if ref is wr:
-                # если ссылка совпадает с заданной
-                del self.__incidents[indx]
-                # удаляем по заданному индексу
-                break
-        """
-        for indx, (wref, _) in enumerate(self.__incidents):
-            if wref is wr:
-                break
-        else:
-            return
-        del self.__incidents[indx]
+
+
+    def __connect(self, other, weight):
+        # метод соединяет вершину с другой
+        # а также подготавливает инфу для удаления
+        list_of_incidents = self.__incidents
+        cleaner = lambda wr: _clean(list_of_incidents, wr)
+        '''
+        def cleaner(wr):
+            _clean(list_of_incidents, wr)
+        '''
+        data = (ref(other, cleaner), weight)
+        self.__incidents.append(data)
 
     def connect(self, other, weight):
         # соединяем вершину с другими
+        # при чем проверяем двунаправленность
         # raise NotImplementedError()
-        data = (ref(other, self.__clean), weight)
-        self.__incidents.append(data)
+        if other not in self:
+            self.__connect(other, weight)
+        if self not in other:
+            other.__connect(self, weight)
 
     def __len__(self):
         return len(self.__incidents)
@@ -61,7 +83,7 @@ class Vertex(Collection):
         # формируем генератор-функцию
         for wref, weight in self.__incidents:
             yield wref(), weight
-            
+
 
 
 

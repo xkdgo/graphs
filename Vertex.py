@@ -43,8 +43,6 @@ class Vertex(Collection):
     def name(self):
         return self.__name
 
-
-
     def __connect(self, other, weight):
         # метод соединяет вершину с другой
         # а также подготавливает инфу для удаления

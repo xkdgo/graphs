@@ -36,8 +36,8 @@ class Vertex(Collection):
         # Совокупность инцидентных вершин
         self.__incidents = []
 
-    def __del__(self):
-        print('Vertex {} deleted'.format(self.name))
+    # def __del__(self):
+    #     print('Vertex {} deleted'.format(self.name))
 
     @property
     def name(self):

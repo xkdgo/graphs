@@ -3,15 +3,13 @@
 from datetime import datetime
 
 
-def profiling(function):
+def profiling(func):
     def profiled_function(*args, **kwargs):
         t0 = datetime.now()
         try:
-            # return function(*args, **kwargs)
-            yield from function(*args, **kwargs)
+            # return func(*args, **kwargs)
+            yield from func(*args, **kwargs)
         finally:
             t = datetime.now()
-            print(function.__name__, '-'*10, t - t0, '-'*10)
+            print(func.__name__, '-'*10, t - t0, '-'*10)
     return profiled_function
-
-

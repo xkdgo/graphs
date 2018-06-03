@@ -47,11 +47,11 @@ class Vertex(Collection):
         # метод соединяет вершину с другой
         # а также подготавливает инфу для удаления
         list_of_incidents = self.__incidents
-        cleaner = lambda wr: _clean(list_of_incidents, wr)
-        '''
+        # cleaner = lambda wr: _clean(list_of_incidents, wr)
+
         def cleaner(wr):
             _clean(list_of_incidents, wr)
-        '''
+
         data = (ref(other, cleaner), weight)
         self.__incidents.append(data)
 
@@ -81,10 +81,3 @@ class Vertex(Collection):
         # формируем генератор-функцию
         for wref, weight in self.__incidents:
             yield wref(), weight
-
-
-
-
-
-
-

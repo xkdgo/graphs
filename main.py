@@ -15,4 +15,3 @@ for way in G.search_wide('A', 'H'):
     # поиск в ширину
     w = [x.name for x in way]
     print('+' * 20, 'result = {}'.format(w))
-

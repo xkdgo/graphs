@@ -79,24 +79,30 @@ class Graph(Mapping):
         v1 = self[vert1]
         v2 = self[vert2]
         way = [v1.name]
-        print('way_init = {}'.format(way))
+        # print('way_init = {}'.format(way))
         enums = [iter(v1)]
+        # print('enums  = {}'.format(enums))
+        # в список  enums добавляется список кортежей инцидентных вершин от vert1
         count = 0
         while way:
-            print('way = {}'.format(way))
+            # print('way = {}'.format(way))
             count += 1
             try:
                 v, _ = next(enums[-1])
-                print('count = {}, next_vertex = {}'.format(count, v.name))
+                # print('count = {}, next_vertex = {}'.format(count, v.name))
                 if v is v2:
                     # если дошли до конца пути
                     yield way + [v.name]
+                    continue
                 if v.name in way:
                     # если вершина уже есть в пути
                     continue
                 way.append(v.name)
                 enums.append(iter(v))
+                # print('added gen object iter(Vertex(\'{}\'))'.format(v.name))
+                # print('enums  = {}'.format(enums))
             except StopIteration:
+                # print("Вершина {} тупиковая".format(way[-1]))
                 del way[-1]
                 del enums[-1]
 
@@ -108,18 +114,15 @@ class Graph(Mapping):
         ways = [[v1]]
         while ways:
             curr_way = ways.pop(0)
+            # --start DEBUG
+            # for vertex in curr_way:
+            #     print('vertex = {}'.format(vertex.name), end=' ')
+            # print('')
+            # --end DEBUG
             for v, _ in curr_way[-1]:
                 if v is v2:
                     yield curr_way + [v]
+                    continue
                 if v in curr_way:
                     continue
                 ways.append(curr_way + [v])
-
-
-    
-
-
-
-
-
-

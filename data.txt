@@ -9,6 +9,9 @@ D, F, 1
 D, I, 6
 D, J, 5
 F, K, 2
-F, H, 3
+X, H, 3
+X, Z, 3
+H, D, 1
 F, I, 2
 G, K, 2
+Z, A, 1
